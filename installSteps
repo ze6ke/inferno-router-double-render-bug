@@ -1,0 +1,27 @@
+USERNAME=ubuntu
+BUILD_LOG=/home/${USERNAME}/proj/build_log.txt
+echo "starting log file: $BUILD_LOG"
+echo 'starting provision'> $BUILD_LOG
+
+echo 'installing node 6'
+curl -sL https://deb.nodesource.com/setup_6.x | bash >> $BUILD_LOG
+apt-get install -y nodejs >> $BUILD_LOG
+
+echo 'installing git'
+apt-get install -y git >> $BUILD_LOG
+
+echo 'installing chrome (errors supressed)'
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -P /tmp >> $BUILD_LOG 2>&1
+dpkg -i /tmp/google-chrome-stable_current_amd64.deb >> $BUILD_LOG 2>&1
+apt-get -fy install >> $BUILD_LOG #2>&1
+
+echo 'installing yarn'
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - >> $BUILD_LOG
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list >> $BUILD_LOG
+apt-get update >> $BUILD_LOG
+apt-get install -y yarn >> $BUILD_LOG
+
+
+echo 'installing gulp'
+npm install -g gulp-cli >> $BUILD_LOG
+
